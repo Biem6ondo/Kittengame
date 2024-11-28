@@ -1,96 +1,15 @@
 -- Nhannnnnnn
-local coreGui = game:GetService("CoreGui")
-
-for _, gui in ipairs(coreGui:GetChildren()) do
-    if gui.Name == "#32" then
-        gui:Destroy()
-    end
-end
--- Cat
-local ScreenGui = Instance.new("ScreenGui")
-local DraggableButton = Instance.new("TextButton")
-local VirtualInputManager = game:GetService("VirtualInputManager")
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local player = Players.LocalPlayer
-
-ScreenGui.Parent = game.CoreGui
-
-ScreenGui.Name = "#32"
-
-DraggableButton.Parent = ScreenGui
-DraggableButton.Name = "#32"
-DraggableButton.BackgroundColor3 = Color3.new(0, 0, 0)
-DraggableButton.Size = UDim2.new(0, 100, 0, 50)
-DraggableButton.Position = UDim2.new(0, 0, 0, 0)
-DraggableButton.Text = "Toggle"
-DraggableButton.TextColor3 = Color3.new(1, 1, 1)
-DraggableButton.BorderSizePixel = 0
-DraggableButton.Font = Enum.Font.SourceSans
-DraggableButton.TextSize = 24
-DraggableButton.AutoButtonColor = false
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
-UICorner.Parent = DraggableButton
-
-local dragging = false
-local dragInput
-local dragStart
-local startPos
-local holdStart = 0
-
-local function update(input)
-    local delta = input.Position - dragStart
-    DraggableButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-DraggableButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = DraggableButton.Position
-        holdStart = tick()
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.K, false, nil)
-    end
-end)
-
-DraggableButton.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.K, false, nil)
-    end
-end)
-
-DraggableButton.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        update(input)
-    end
-end)
-
-game:GetService("RunService").RenderStepped:Connect(function()
-    if dragging and (tick() - holdStart) >= 5 then
-        DraggableButton.Visible = false
-    end
-end)
--- Gui here
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
-   Name = "Kitten Game🐾",
-   LoadingTitle = ":)",
+   Name = "Kitten Game🐾 (BETA)",
+   LoadingTitle = "Talented but not virtuous",
    LoadingSubtitle = "by ACE1991ACE",
+})
+Rayfield:Notify({
+   Title = "Last Update",
+   Content = "26/11/2024",
+   Duration = 3,
+   Image = 4483362458,
 })
 local Tab = Window:CreateTab("Main", 4483362458)
 local Button = Tab:CreateButton({
@@ -163,6 +82,68 @@ Tab:CreateToggle({
         end
     end,
 })
+local isRunning = false
+Tab:CreateToggle({
+    Name = "Spam Sound (attack)",
+    CurrentValue = false,
+    Flag = "ToggleSpamMeow",
+    Callback = function(Value)
+        isRunning = Value
+        if Value then
+            while isRunning do
+                local args = {
+    [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Attack"):WaitForChild("Animation_Cat"):WaitForChild("Attack")
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
+
+                wait()
+            end
+        end
+    end,
+})
+local isRunning = false
+Tab:CreateToggle({
+    Name = "Spam Sound (Purr)",
+    CurrentValue = false,
+    Flag = "ToggleSpamMeow",
+    Callback = function(Value)
+        isRunning = Value
+        if Value then
+            while isRunning do
+local args = {
+    [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Purr"):WaitForChild("Animation_Cat"):WaitForChild("Purr")
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
+
+                wait()
+            end
+        end
+    end,
+})
+local isRunning = false
+Tab:CreateToggle({
+    Name = "Spam Sound (Hiss)",
+    CurrentValue = false,
+    Flag = "ToggleSpamMeow",
+    Callback = function(Value)
+        isRunning = Value
+        if Value then
+            while isRunning do
+local args = {
+    [1] = game:GetService("ReplicatedStorage"):WaitForChild("Animations"):WaitForChild("Emotes"):WaitForChild("Hiss"):WaitForChild("Animation_Cat"):WaitForChild("Hiss")
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlaySound"):FireServer(unpack(args))
+
+                wait()
+            end
+        end
+    end,
+})
+
+
 local selectedColor = Color3.new(1, 1, 1)
 
 Tab:CreateColorPicker({
@@ -178,98 +159,113 @@ Tab:CreateColorPicker({
         game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("LaserPointerEvents"):WaitForChild("CreateLaserDot"):FireServer(unpack(args))
     end,
 })
+local SelectedColor = Color3.fromRGB(255, 255, 255)
+local SelectedFontSize = 15
 
 local ColorPicker = Tab:CreateColorPicker({
     Name = "Text Color",
-    Color = Color3.fromRGB(255,255,255),
+    Color = SelectedColor,
     Flag = "ColorPicker1",
     Callback = function(Value)
         SelectedColor = Value
-    end
+    end,
 })
-local Label = Tab:CreateLabel("You need to select the color first to use SERVER CHAT")
+
+local FontSizeInput = Tab:CreateInput({
+    Name = "Font Size",
+    CurrentValue = tostring(SelectedFontSize),
+    PlaceholderText = "Enter font size (e.g., 5)",
+    RemoveTextAfterFocusLost = false,
+    Flag = "FontSizeInput",
+    Callback = function(Value)
+        local size = tonumber(Value)
+        if size and size > 0 then
+            SelectedFontSize = size
+        else
+            SelectedFontSize = 5
+        end
+    end,
+})
+
+local ToggleBold = Tab:CreateToggle({
+    Name = "Bold Text",
+    CurrentValue = false,
+    Flag = "ToggleBold",
+    Callback = function(Value)
+    end,
+})
+
+local ToggleItalic = Tab:CreateToggle({
+    Name = "Italic Text",
+    CurrentValue = false,
+    Flag = "ToggleItalic",
+    Callback = function(Value)
+    end,
+})
+
+local ToggleUnderline = Tab:CreateToggle({
+    Name = "Underline Text",
+    CurrentValue = false,
+    Flag = "ToggleUnderline",
+    Callback = function(Value)
+    end,
+})
+
+local Mid = Tab:CreateToggle({
+    Name = "Middle line Text",
+    CurrentValue = false,
+    Flag = "Mid",
+    Callback = function(Value)
+    end,
+})
+
 Tab:CreateInput({
     Name = "[SERVER] Chat (Bad word support)",
     PlaceholderText = "Type your message here...",
-    RemoveTextAfterFocusLost = false,
+    RemoveTextAfterFocusLost = true,
     Callback = function(Value)
+        local fontSize = SelectedFontSize or 5
         local args = {
-            "<font color='rgb(" .. math.floor(SelectedColor.R * 255) .. "," .. math.floor(SelectedColor.G * 255) .. "," .. math.floor(SelectedColor.B * 255) .. ")'><b>" .. Value .. "</b></font>"
+            "<font size='" .. fontSize .. "' color='rgb(" 
+            .. math.floor(SelectedColor.R * 255) .. "," 
+            .. math.floor(SelectedColor.G * 255) .. "," 
+            .. math.floor(SelectedColor.B * 255) .. ")'>" 
+            .. Value .. "</font>"
         }
+        if ToggleBold.CurrentValue then
+            args[1] = "<b>" .. args[1] .. "</b>"
+        end
+        if ToggleItalic.CurrentValue then
+            args[1] = "<i>" .. args[1] .. "</i>"
+        end
+        if ToggleUnderline.CurrentValue then
+            args[1] = "<u>" .. args[1] .. "</u>"
+        end
+        if Mid.CurrentValue then
+            args[1] = "<s>" .. args[1] .. "</s>"
+        end
         game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
-    end,
-})
-local customName1 = ""
-local customName2 = ""
-
-Tab:CreateInput({
-    Name = "Name",
-    PlaceholderText = "Enter your name...",
-    RemoveTextAfterFocusLost = true,
-    Callback = function(Value)
-        customName1 = Value
-    end,
-})
-
-Tab:CreateInput({
-    Name = "Describe",
-    PlaceholderText = "Describe yourself...",
-    RemoveTextAfterFocusLost = true,
-    Callback = function(Value)
-        customName2 = Value
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Apply Name",
-    Callback = function()
-        local args = { customName1, customName2 }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChangeName"):FireServer(unpack(args))
     end,
 })
 local Tab = Window:CreateTab("Teleport", 4483362458)
 
-Tab:CreateButton({
-    Name = "Mansion",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-14, 17, 78)
-    end,
-})
+local teleportArgs = {
+    {"Mansion", CFrame.new(-14, 17, 78)},
+    {"Food island", CFrame.new(-183, 12, 373)},
+    {"Magic island", CFrame.new(-234, 17, -256)},
+    {"Evil Cat", CFrame.new(84, 12, -328)},
+    {"Waterfall island", CFrame.new(94, 21, 447)},
+    {"Backroom", CFrame.new(-1857, -139, 5)}
+}
 
-Tab:CreateButton({
-    Name = "Food island",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-183, 12, 373)
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Magic island",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-234, 17, -256)
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Evil Cat",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(84, 12, -328)
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Waterfall island",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(94, 21, 447)
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Backroom",
-    Callback = function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1857, -139, 5)
-    end,
-})
+for _, args in ipairs(teleportArgs) do
+    Tab:CreateButton({
+        Name = args[1],
+        Callback = function()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = args[2]
+        end,
+    })
+end
 local Tab = Window:CreateTab("Auto Farm", 4483365998)
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
@@ -314,106 +310,25 @@ Tab:CreateToggle({
         end
     end,
 })
-
-local Tab = Window:CreateTab("Audio", 10491133376)
-Tab:CreateButton({
-    Name = "Lobby",
-    Callback = function()
-        local args = {
-            [1] = "General"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Party",
-    Callback = function()
-        local args = {
-            [1] = "PartyRoom"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Backroom",
-    Callback = function()
-        local args = {
-            [1] = "Level0"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("UpdateMusicRegion"):FireServer(unpack(args))
-    end,
-})
-
 local Tab = Window:CreateTab("Premium", 10491133376)
-Tab:CreateButton({
-    Name = "Shark Cat",
-    Callback = function()
-        local args = {
-    [1] = "SharkCat",
-    [2] = "Chunky"
+local morphData = {
+    {Name = "Shark Cat", Morph = "SharkCat", Size = "Chunky"},
+    {Name = "Glitch Cat", Morph = "Glitch", Size = "Regular"},
+    {Name = "Caracal", Morph = "Caracal", Size = "Regular"},
+    {Name = "Baby Caracal", Morph = "Caracal_Small", Size = "Baby"},
+    {Name = "Baby Glitch", Morph = "Glitch_Small", Size = "Baby"},
+    {Name = "Baby Shark Cat", Morph = "SharkCat_Small", Size = "Baby"}
 }
 
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Glitch Cat",
-    Callback = function()
-        local args = {
-            [1] = "Glitch",
-            [2] = "Regular"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Caracal",
-    Callback = function()
-        local args = {
-            [1] = "Caracal",
-            [2] = "Regular"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Baby Caracal",
-    Callback = function()
-        local args = {
-            [1] = "Caracal_Small",
-            [2] = "Baby"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Baby Glitch",
-    Callback = function()
-        local args = {
-            [1] = "Glitch_Small",
-            [2] = "Baby"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-    end,
-})
-
-Tab:CreateButton({
-    Name = "Baby Shark Cat",
-    Callback = function()
-        local args = {
-            [1] = "SharkCat_Small",
-            [2] = "Baby"
-        }
-        game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
-    end,
-})
+for _, data in ipairs(morphData) do
+    Tab:CreateButton({
+        Name = data.Name,
+        Callback = function()
+            local args = {data.Morph, data.Size}
+            game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("MorphEvents"):WaitForChild("Morph"):FireServer(unpack(args))
+        end,
+    })
+end
 local Tab = Window:CreateTab("Animator_Kitten", 4483362458)
 Tab:CreateButton({
 	Name = "Stop animation",
@@ -557,32 +472,6 @@ Tab:CreateToggle({
     end,
 })
 Tab:CreateButton({
-	Name = "Weird Jump Animation (Reduced performance!)\n*To turn off, you need to rejoin",
-	Callback = function()
-while wait(0.3) do
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
-
-local animation = Instance.new("Animation")
-animation.AnimationId = "rbxassetid://13988137029"
-local animationTrack = humanoid:LoadAnimation(animation)
-
-local function onJump()
-    if humanoid:GetState() == Enum.HumanoidStateType.Jumping then
-        animationTrack:Play()
-    end
-end
-
-humanoid.StateChanged:Connect(function(_, newState)
-    if newState == Enum.HumanoidStateType.Jumping then
-        onJump()
-    end
-end)
-end
-end,
-})
-Tab:CreateButton({
 Name = "Clear Chat",
 Callback = function()
 local newline_count = 20001
@@ -600,23 +489,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("
 end,
 })
 Tab:CreateButton({
-Name = "Lag (Weak: 157/Kbs)",
-Callback = function()
-local newline_count = 35000
-local newline_text = ""
-
-for i = 1, newline_count do
-    newline_text = newline_text .. "📗"
-end
-
-local args = {
-    [1] = newline_text
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
-end,
-})
-Tab:CreateButton({
 Name = "Evil Cat Say (Beta)",
 Callback = function()
 local args = {
@@ -624,5 +496,185 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+end,
+})
+local Toggle = Tab:CreateToggle({
+   Name = "Toggle Time Announcement (US Time)",
+   CurrentValue = false,
+   Flag = "ToggleUSTime", 
+   Callback = function(Value)
+      _G.ToggleUSTime = Value
+   end,
+})
+
+spawn(function()
+   while wait(0.5) do
+      if _G.ToggleUSTime then
+         local args = {
+             [1] = ("\n"):rep(30)
+         }
+         game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+
+         local time = os.date("!*t")
+         time.hour = (time.hour - 5) % 24
+         local usTime = string.format("%02d:%02d:%02d", time.hour, time.min, time.sec)
+         
+         local args = {
+             [1] = usTime
+         }
+         game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ChatAnnouncement_Client"):FireServer(unpack(args))
+      end
+   end
+end)
+Tab:CreateButton({
+Name = "CatAnim",
+Callback = function()
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local animate = character:WaitForChild("Animate")
+animate:WaitForChild("run").RunAnim.AnimationId = "rbxassetid://17410225939"
+end,
+})
+local Toggle = Tab:CreateToggle({
+   Name = "Spam invitations (Pick Up)",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       if Value then
+           _G.ToggleActive = true
+           while _G.ToggleActive and wait() do
+               local Players = game:GetService("Players")
+               local ReplicatedStorage = game:GetService("ReplicatedStorage")
+               local PickUpEvent = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PickUpEvents"):WaitForChild("PickUp_Prompt_Request")
+
+               for _, player in pairs(Players:GetPlayers()) do
+                   local args = {
+                       [1] = player.Name
+                   }
+                   PickUpEvent:FireServer(unpack(args))
+               end
+           end
+       else
+           _G.ToggleActive = false
+       end
+   end,
+})
+local Toggle = Tab:CreateToggle({
+   Name = "Auto Detach",
+   CurrentValue = false,
+   Flag = "ToggleAutoDetach",
+   Callback = function(Value)
+       if Value then
+           _G.AutoDetachActive = true
+           while _G.AutoDetachActive and wait() do
+               game:GetService("ReplicatedStorage")
+                   :WaitForChild("RemoteEvents")
+                   :WaitForChild("PickUpEvents")
+                   :WaitForChild("DetachPlayers")
+                   :FireServer()
+           end
+       else
+           _G.AutoDetachActive = false
+       end
+   end,
+})
+local Toggle = Tab:CreateToggle({
+   Name = "Loop 'Forced PickUp'? (Still Error)",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       if Value then
+           StartLoop()
+       else
+           StopLoop()
+       end
+   end,
+})
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RemoteEvents = ReplicatedStorage:WaitForChild("RemoteEvents"):WaitForChild("PickUpEvents")
+local PickUpEvent = RemoteEvents:WaitForChild("PickUp")
+
+local PlayerList = {}
+local isLoopRunning = false
+
+for _, player in pairs(Players:GetPlayers()) do
+    table.insert(PlayerList, player.Name)
+end
+
+local Dropdown = Tab:CreateDropdown({
+   Name = "Forced Pick up",
+   Options = PlayerList,
+   CurrentOption = {PlayerList[1]},
+   MultipleOptions = false,
+   Flag = "PlayerDropdown",
+   Callback = function(Options)
+       local selectedPlayerName = Options[1]
+       local selectedPlayer = Players:FindFirstChild(selectedPlayerName)
+       
+       if selectedPlayer then
+           local playerChar = selectedPlayer.Character
+           local myChar = Players.LocalPlayer.Character
+           
+           if playerChar and myChar then
+               myChar:SetPrimaryPartCFrame(playerChar.HumanoidRootPart.CFrame)
+           end
+wait(0.75)
+           local args = {
+               [1] = selectedPlayer
+           }
+           PickUpEvent:FireServer(unpack(args))
+       end
+   end,
+})
+
+function StartLoop()
+   if not isLoopRunning then
+       isLoopRunning = true
+       while isLoopRunning do
+           local selectedPlayer = Players:FindFirstChild(Dropdown.CurrentOption[1])
+           if selectedPlayer then
+               local playerChar = selectedPlayer.Character
+               local myChar = Players.LocalPlayer.Character
+               if playerChar and myChar then
+               end
+               local args = {
+                   [1] = selectedPlayer
+               }
+               PickUpEvent:FireServer(unpack(args))
+           end
+           wait(0.1)
+       end
+   end
+end
+
+function StopLoop()
+   isLoopRunning = false
+end
+Tab:CreateButton({
+Name = " Caro winner (X) ",
+Callback = function()
+for i = 1, 9 do
+    local args = {
+        [1] = tostring(i),
+        [2] = "X"
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("TicTacToeEvents"):WaitForChild("NextTurn"):FireServer(unpack(args))
+end
+end,
+})
+Tab:CreateButton({
+Name = " Caro winner (O) ",
+Callback =function()
+for i = 1, 9 do
+    local args = {
+        [1] = tostring(i),
+        [2] = "O"
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("TicTacToeEvents"):WaitForChild("NextTurn"):FireServer(unpack(args))
+end
 end,
 })
